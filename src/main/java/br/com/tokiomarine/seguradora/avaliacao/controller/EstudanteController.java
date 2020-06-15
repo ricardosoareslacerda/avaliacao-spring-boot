@@ -2,13 +2,15 @@ package br.com.tokiomarine.seguradora.avaliacao.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.tokiomarine.seguradora.avaliacao.entidade.Estudante;
 import br.com.tokiomarine.seguradora.avaliacao.service.EstudandeService;
@@ -17,55 +19,61 @@ import br.com.tokiomarine.seguradora.avaliacao.service.EstudandeService;
 @RequestMapping("/estudantes/")
 public class EstudanteController {
 
-	// TODO efetue a correção dos problemas que existem na classe Estudante Controller
+	private static final String REDIRECT_ESTUDANTES_LISTAR = "redirect:/estudantes/listar";
+	private static final String PAGE_CADASTRAR_ESTUDANTE = "cadastrar-estudante";
+	private static final String PAGE_ATUALIZAR_ESTUDANTE = "atualizar-estudante";
+	
+	@Autowired
 	EstudandeService service;
 
-	@GetMapping("criar")
-	public String iniciarCastrado(Estudante estudante) {
-		return "cadastrar-estudante";
+	@RequestMapping(value = "listar")
+	public ModelAndView listarEstudantes() {
+		ModelAndView model = new ModelAndView(IndexEstudanteController.PAGE_INDEX);
+		model.addObject("estudantes", service.buscarEstudantes());
+		return model;
 	}
 
-	@GetMapping("listar")
-	public String listarEstudantes(Model model) {
-		model.addAttribute("estudtes", service.buscarEstudantes());
-		return "index";
+	@RequestMapping("criar")
+	public ModelAndView iniciarCastrado() {
+		ModelAndView model = new ModelAndView(PAGE_CADASTRAR_ESTUDANTE);
+		model.addObject("estudante", new Estudante());
+		return model;
 	}
 
 	@PostMapping("add")
-	public String adicionarEstudante(@Valid Estudante estudante, BindingResult result, Model model) {
+	public ModelAndView adicionarEstudante(@Valid Estudante estudante, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
-			return "cadastrar-estudante";
+			attributes.addFlashAttribute(estudante);
+			return new ModelAndView(PAGE_CADASTRAR_ESTUDANTE);
 		}
 
 		service.cadastrarEstudante(estudante);
-
-		return "redirect:listar";
+		return new ModelAndView(REDIRECT_ESTUDANTES_LISTAR);
 	}
 
 	@GetMapping("editar/{id}")
-	public String exibirEdicaoEstudante(long id, Model model) {
+	public ModelAndView exibirEdicaoEstudante(@PathVariable("id") long id) {
 		Estudante estudante = service.buscarEstudante(id);
-		model.addAttribute("estudante", estudante);
-		return "atualizar-estudante";
+		ModelAndView model = new ModelAndView(PAGE_ATUALIZAR_ESTUDANTE);
+		model.addObject("estudante", estudante);
+		
+		return model;
 	}
 
-	@PostMapping("atualizar/{id}")
-	public String atualizarEstudante(@PathVariable("id") long id, @Valid Estudante estudante, BindingResult result, Model model) {
+	@PostMapping("atualizar")
+	public ModelAndView atualizarEstudante(@Valid Estudante estudante, BindingResult result, RedirectAttributes attributes) {
 		if (result.hasErrors()) {
-			// estudante.setId(id);
-			return "atualizar-estudante";
+			attributes.addFlashAttribute(estudante);
+			return new ModelAndView(PAGE_ATUALIZAR_ESTUDANTE);
 		}
 
-		service.atualizarEstudante(estudante);
-
-		model.addAttribute("estudantes", service.buscarEstudantes());
-		return "index";
+		estudante = service.atualizarEstudante(estudante);
+		return new ModelAndView(REDIRECT_ESTUDANTES_LISTAR);
 	}
 
 	@GetMapping("apagar/{id}")
-	public String apagarEstudante(@PathVariable("id") long id, Model model) {
-		// TODO IMPLEMENTAR A EXCLUSAO DE ESTUDANTES
-		model.addAttribute("estudantes", service.buscarEstudantes());
-		return "index";
+	public ModelAndView apagarEstudante(@PathVariable("id") Long id) {
+		service.apagarEstudante(id);
+		return new ModelAndView(REDIRECT_ESTUDANTES_LISTAR);
 	}
 }

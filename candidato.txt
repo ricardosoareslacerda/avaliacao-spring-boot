@@ -1,0 +1,61 @@
+#Adequações do test - avaliacao-spring-boot -
+- Realização do fork do projeto para a minha conta no github,
+- Clone do projeto para meu workspace
+- Sincronizado o workspace com o bitbucket
+- Importação do projeto test como maven no eclipse
+- Atualização das pastas do eclipse no git ignore
+- Adequação da camada de 'Modelo':
+	- 'Estudante' com os atributos solicitados
+	- 'Estudante' como entidade do banco de dados (H2)
+	- 'Estudante' com as validaçoes solicitadas.
+- Adequação da camada de 'Repositório':
+	- 'EstudanteRepositorio' com a extenção de Repositorio do JPA
+	- 'EstudanteRepositorio' com a marcação de anotação de Repositorio para disponibilização de injeção da dependência
+- Adequação da fachada de 'Serviço':
+	- Implementação dos métodos crud de persistência na base de dados.
+	- Adequação da classe de implementação:
+		- Anotação com Serviço para disponibilização de injeção de dependência.
+		- Tratativa para as implementações de persistência.
+		- Validações das rotinas de atualização e remoção do estudante.
+- Adequação da fachada de 'Controle da Aplicação':
+	- Correção na rotina de listagem de estudante para a exibição dos estudante retornados da pesquisa do serviço
+	- Correção da rotina de criar estudante:
+		- Criação de uma nova instância da entidade 'Estudante'
+		- Criação de um novo parâmetro com referência do model da view.
+	- Correção da rotina de adicionar de estudante:
+		- Alteração dos parâmetros para validação do estudante.
+		- Alteração para recebimento da mensagens de validação do estudante.
+		- Correção do retorno para a tela de listagem de estudantes.
+	- Correção da rotina de exibir um estudante
+		- Adicionado a anotação no parâmetro id.
+		- Equalização de todos os retornos como ModelAndView.
+	- Correção da rotina de atualização de estudante:
+		- Alteração dos parâmetros para validação do estudante.
+		- Alteração para recebimento da mensagens de validação do estudante.
+		- Correção do retorno para a tela de listagem de estudantes.
+	- Correção da rotina de remover um estudante:
+		- Equalização de todos os retornos como ModelAndView.
+- Adequação da fachada de controle 'REST' da aplicação:
+	- Copia das rotinas/métodos da classe de controle da aplicação.
+	- Adequação das rotinas/métodos para os recursos REST apropriados.
+- Adequação da camada de 'Visão':
+	- Adequação na tela de listagem:
+		- Correção da tag do thymeleaf:
+		- Inclusão dos campos solicitados na classe estudante.
+		- Alteração do ícone de exclusão conforme solicitado.
+	- Adequação na tela de cadastro/atualização:
+		- Organização das tags
+		- Inclusão dos campos solicitados.
+		- Alteração do botão para adicionar o estudante para submeter a página.
+- Criação das inclusões dos estudantes no arquivo import.sql conforme o documento.
+- Alteração da porta para 8081 conforme o docuemento.
+- Criação de uma nova fachada de 'Controle da Aplicação'
+	- Adequação do path '/' para a página 'index'.
+- Criação de uma classe de controle das exceções da aplicação.
+- Inclusão de máscara no campo telefone.
+- Testes da aplicação :
+	- Fluxos de rotas das telas.
+	- Inclusão de novos estudantes.
+	- Alteração de um estudante da listagem.
+	- Exclusão de um estudante.
+	- Validação dos campos nas telas de alteração e exclusão de estudante.

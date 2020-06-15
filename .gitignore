@@ -14,6 +14,14 @@ build/
 .springBeans
 .sts4-cache
 
+### Eclipse ###
+.metadata
+.settings
+.mvn
+.classpath
+.project
+.springBeans
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
